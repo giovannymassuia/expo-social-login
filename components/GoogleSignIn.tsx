@@ -2,10 +2,15 @@ import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-goo
 import { useEffect, useState } from 'react';
 import { Button, Image, Text, View } from 'react-native';
 
-export function GoogleSignIn() {
+type Props = {
+    vendorSignIn: (token: string) => any;
+};
+
+export function GoogleSignIn({ vendorSignIn }: Props) {
     // default config
     GoogleSignin.configure({
-        scopes: ['email', 'profile']
+        scopes: ['email', 'profile'],
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
     });
 
     const [state, setState] = useState<any>({});
@@ -36,7 +41,16 @@ export function GoogleSignIn() {
 
             console.log('google sign in success: ', JSON.stringify(userInfo, null, 2));
 
+            if (!userInfo) {
+                console.log('no user info');
+                return;
+            }
+
             setState({ userInfo });
+
+            // login with vendor
+            const result = vendorSignIn(userInfo.idToken!);
+            console.log('vendor sign in result: ', JSON.stringify(result, null, 2));
         } catch (error: any) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow

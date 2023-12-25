@@ -17,7 +17,7 @@ export function GoogleSignIn() {
             if (isSignedIn) {
                 // get the user info
                 GoogleSignin.getCurrentUser().then((userInfo) => {
-                    console.log('current user info: ', userInfo);
+                    console.log('current user info: ', JSON.stringify(userInfo, null, 2));
 
                     setState({ userInfo });
                 });

@@ -12,9 +12,13 @@ type AppleCredential = {
     };
 };
 
+type Props = {
+    vendorSignIn: (token: string) => any;
+};
+
 const APPLE_CREDENTIAL_KEY = 'appleCredential';
 
-export function AppleSignIn() {
+export function AppleSignIn({ vendorSignIn }: Props) {
     const userId = '000506.c9659cd1b86149748a95e13035f4fd5e.0230';
     const [state, setState] = useState<AppleCredential | undefined>(undefined);
 
@@ -70,6 +74,8 @@ export function AppleSignIn() {
             });
 
             console.log('apple sign in success: ', JSON.stringify(credential, null, 2));
+
+            vendorSignIn(credential.identityToken!);
 
             if (credential.identityToken && (!credential.email || !credential.fullName)) {
                 console.log('auth worked, but not the first authentication');

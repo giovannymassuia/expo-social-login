@@ -34,7 +34,7 @@ export default function App() {
             <StatusBar style="auto" />
 
             {Platform.OS === 'android' && <GoogleSignIn vendorSignIn={(token) => supabaseSignIn('google', token)} />}
-            {Platform.OS === 'ios' && <AppleSignIn />}
+            {Platform.OS === 'ios' && <AppleSignIn vendorSignIn={(token) => supabaseSignIn('apple', token)} />}
 
             <View
                 style={{
